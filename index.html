@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<script src="http://threejs.org/build/three.min.js"></script>
+	<script src="http://threejs.org/examples/js/renderers/SVGRenderer.js"></script>
+	<script src="http://threejs.org/examples/js/renderers/Projector.js"></script>
+	<script src="http://threejs.org/examples/js/loaders/SVGLoader.js"></script>
+	<script>
+		/**
+		 * @author mrdoob / http://mrdoob.com/
+		 * @author zz85 / http://joshuakoo.com/
+		 * @see https://github.com/mrdoob/three.js/issues/14387
+		 */
+
+		THREE.LegacySVGLoader = function ( manager ) {
+
+			this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+
+		};
+
+		THREE.LegacySVGLoader.prototype = {
+
+			constructor: THREE.LegacySVGLoader,
+
+			load: function ( url, onLoad, onProgress, onError ) {
+
+				var scope = this;
+
+				var parser = new DOMParser();
+
+				var loader = new THREE.FileLoader( scope.manager );
+				loader.load( url, function ( svgString ) {
+
+					var doc = parser.parseFromString( svgString, 'image/svg+xml' ); // application/xml
+
+					onLoad( doc.documentElement );
+
+				}, onProgress, onError );
+
+			}
+
+		};
+	</script>
+	<script src="app.js"></script>
+</body>
+</html>
